@@ -1,5 +1,5 @@
 import pandas as pd
-from utils import LLMWrapper, PromptStabilityAnalysis, get_openai_api_key
+from utils import OpenAIAnnotator, PromptStabilityAnalysis, get_openai_api_key
 import matplotlib.pyplot as plt
 
 # Baseline stochasticity
@@ -13,7 +13,7 @@ df = pd.read_csv('data/tweets.csv')
 df = df.sample(100, random_state=123)
 example_data = list(df['text'].values)
 
-llm = LLMWrapper(apikey=APIKEY, model=MODEL)
+llm = OpenAIAnnotator(apikey=APIKEY, model=MODEL)
 psa = PromptStabilityAnalysis(llm=llm, data=example_data)
 
 # Step 2: Construct the Prompt
@@ -28,4 +28,4 @@ ka_scores, annotated_data = psa.baseline_stochasticity(original_text, prompt_pos
 temperatures = [0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5,  5.0]
 
 # Get KA scores across different temperature paraphrasings
-ka_scores, annotated_data = psa.interprompt_stochasticity(original_text, prompt_postfix, nr_variations=10, temperatures=temperatures, iterations = 1, print_prompts=True, plot=True, save_path='plots/00_tweets_between.png', save_csv = 'data/annotated/tweets_between.csv')
+ka_scores, annotated_data = psa.interprompt_stochasticity(original_text, prompt_postfix, nr_variations=10, temperatures=temperatures, iterations = 1, print_prompts=False, plot=True, save_path='plots/00_tweets_between.png', save_csv = 'data/annotated/tweets_between.csv')
